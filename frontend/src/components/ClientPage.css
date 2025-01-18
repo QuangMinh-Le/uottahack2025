@@ -1,0 +1,64 @@
+/* General container styling */
+.container-fluid {
+    background-color: #f8f9fa; /* Light grey background */
+    padding: 20px;
+}
+
+/* Floorplan image styling */
+.img-fluid {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-height: 400px;
+    margin: auto;
+    display: block;
+}
+
+/* Washroom table styling */
+.table {
+    background-color: #ffffff; /* White background for the table */
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Table header */
+.table th {
+    background-color: #343a40; /* Dark header background */
+    color: #ffffff; /* White text */
+    text-align: center;
+}
+
+/* Table rows */
+.table td {
+    text-align: center;
+    padding: 8px;
+}
+
+/* Filter dropdown */
+.form-select {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+/* Filter section */
+.d-flex {
+    margin-bottom: 15px;
+}
+
+/* Headings */
+h2 {
+    color: #343a40; /* Dark heading color */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .table {
+        font-size: 0.9rem; /* Smaller text for mobile */
+    }
+
+    .img-fluid {
+        max-height: 250px; /* Reduce image height for smaller screens */
+    }
+}
