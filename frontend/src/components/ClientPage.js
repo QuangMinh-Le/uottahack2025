@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import './ClientPage.css';
 
 const ClientPage = (props) => {
     const [genderFilter, setGenderFilter] = useState('all');
 
     const washrooms = [
-        { id: 1, name: 'Washroom 1', gender: 'male' },
-        { id: 2, name: 'Washroom 2', gender: 'female' },
-        { id: 3, name: 'Washroom 3', gender: 'unisex' },
+        { id: 1, name: 'Washroom 1', gender: 'male', totalAvailStalls: 3 },
+        { id: 2, name: 'Washroom 2', gender: 'female', totalAvailStalls: 0 },
+        { id: 3, name: 'Washroom 3', gender: 'female', totalAvailStalls: 5 },
     ];
 
     const filteredWashrooms = washrooms.filter(washroom =>
@@ -46,7 +47,6 @@ const ClientPage = (props) => {
                                 <option value="all">All</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
-                                <option value="unisex">Unisex</option>
                             </select>
                         </div>
                     </div>
@@ -61,7 +61,8 @@ const ClientPage = (props) => {
                         <tbody>
                             {filteredWashrooms.map(washroom => (
                                 <tr key={washroom.id}>
-                                    <td>{washroom.name}</td>
+                                    <td>{washroom.name} 
+                                        {washroom.gender === "female" ? <i class="bi bi-person-standing-dress" style={{ color: '#c71585', marginLeft: '0.5rem' }}></i> : <i class="bi bi-person-standing" style={{ color: 'blue', marginLeft: '0.5rem' }}></i>} - {washroom.totalAvailStalls} available</td>
                                     <td>{washroom.gender}</td>
                                 </tr>
                             ))}
