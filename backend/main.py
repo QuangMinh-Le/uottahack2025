@@ -9,25 +9,30 @@ app = Flask(__name__)
 # = os.getenv("TRUST_STORE_FILE_PATH", "./DigiCertGlobalRootCA.crt")
 
 # Build the Solace messaging service connection
-broker_props = MessagingService.builder() \
-    .from_properties({
-        "solace.messaging.transport.host": "tcp://mr-connection-ghw5zbvtb29.messaging.solace.cloud:55555",
-        "solace.messaging.service.vpn-name": "toiletflush",
-        "solace.messaging.authentication.scheme.basic.username": "solace-cloud-client",
-        "solace.messaging.authentication.scheme.basic.password": "b8888b098i13ip23decqu9cj87"
-    }).build()
+broker_props = {
 
-# transport_security = TLS.create() \
-#   .with_certificate_validation(True, validate_server_name=False,
-#     trust_store_file_path=trust_store_path)
+    "solace.messaging.transport.host": "tcp://mr-connection-ghw5zbvtb29.messaging.solace.cloud:55555",
+
+    "solace.messaging.service.vpn-name": "toiletflush",
+
+    "solace.messaging.authentication.scheme.basic.username": "solace-cloud-client",
+
+    "solace.messaging.authentication.scheme.basic.password": "b8888b098i13ip23decqu9cj87",
+}
+
+transport_security = TLS.create() \
+   .with_certificate_validation(True, validate_server_name=False,
+     trust_store_file_path="./Users/quynhvo/Library/Mobile Documents/com~apple~CloudDocs/Hackathon/uottahack2025/backend/DigiCertGlobalRootCA.crt.pem")
 
 messaging_service = (
     MessagingService.builder()
     .from_properties(broker_props)
     .with_reconnection_retry_strategy(RetryStrategy.parametrized_retry(20, 3))
-  #ransport_security_strategy(transport_security)
+    .with_transport_security_strategy(transport_security)
     .build()
+
 )
+
 
 messaging_service.connect()
 print("Connected to Solace PubSub+ successfully!")
