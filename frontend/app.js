@@ -7,8 +7,8 @@ const App = () => {
     useEffect(() => {
         // Initialize Solace connection
         const solaceHost = 'mr-connection-ghw5zbvtb29.messaging.solace.cloud';
-        const solaceUsername = 'your-client-username';
-        const solacePassword = 'your-client-password';
+        const solaceUsername = 'solace-cloud-client';
+        const solacePassword = 'b8888b098i13ip23decqu9cj87';
 
         const solaceSession = solace.SolclientFactory.createSession({
             url: solaceHost,
