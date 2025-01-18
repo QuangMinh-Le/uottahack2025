@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "solace": "^1.2.0"
+  }
+}
