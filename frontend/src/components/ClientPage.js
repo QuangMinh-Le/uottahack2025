@@ -4,19 +4,20 @@ import solace from 'solclientjs';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './ClientPage.css';
+import Washroom from './Washroom';
 
 const ClientPage = (props) => {
     const [genderFilter, setGenderFilter] = useState('all');
     const [stalls, setStalls] = useState({}); // Define the stalls state
 
     const washrooms = [
-        { id: 1, name: 'Washroom 1', gender: 'male', totalAvailStalls: 3 },
-        { id: 2, name: 'Washroom 2', gender: 'female', totalAvailStalls: 0 },
-        { id: 3, name: 'Washroom 3', gender: 'female', totalAvailStalls: 5 },
+        new Washroom(1, 6, 5, "male"),
+        new Washroom(2, 6, 3, "female")
     ];
 
+    // Filter washrooms by gender
     const filteredWashrooms = washrooms.filter(washroom =>
-        genderFilter === 'all' || washroom.gender === genderFilter
+        genderFilter === "all" || washroom.gender === genderFilter
     );
 
         useEffect(() => {
@@ -120,8 +121,8 @@ const ClientPage = (props) => {
                         <tbody>
                             {filteredWashrooms.map(washroom => (
                                 <tr key={washroom.id}>
-                                    <td>{washroom.name} 
-                                        {washroom.gender === "female" ? <i class="bi bi-person-standing-dress" style={{ color: '#c71585', marginLeft: '0.5rem' }}></i> : <i class="bi bi-person-standing" style={{ color: 'blue', marginLeft: '0.5rem' }}></i>} - {washroom.totalAvailStalls} available</td>
+                                    <td>Washroom {washroom.id} 
+                                        {washroom.gender === "female" ? <i class="bi bi-person-standing-dress" style={{ color: '#c71585', marginLeft: '0.5rem' }}></i> : <i class="bi bi-person-standing" style={{ color: 'blue', marginLeft: '0.5rem' }}></i>} - {washroom.availableStalls} available</td>
                                     <td>{washroom.gender}</td>
                                 </tr>
                             ))}
