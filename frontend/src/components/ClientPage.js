@@ -4,6 +4,7 @@ import solace from 'solclientjs';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './ClientPage.css';
+import video from './assets/Kitten Unrolling Toilet Paper.mp4';
 import Washroom from './Washroom';
 // test
 let data = ""
@@ -288,6 +289,13 @@ const ClientPage = (props) => {
                             ))}
                         </tbody>
                     </table>
+                        { /* Center the video */}
+                        <div className="d-flex justify-content-center my-4">
+                            <video autoPlay muted loop id="myVideo" style={{ maxWidth: "100%", height: "auto" }}>
+                                <source src={video} type="video/mp4" />
+                                Your browser does not support HTML5 video.
+                            </video>
+                        </div>
                 </div>
             </div>
         </div>
