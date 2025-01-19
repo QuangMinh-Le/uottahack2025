@@ -9,6 +9,8 @@ function Washroom(id, totalStalls, availableStalls, gender) {
     this.totalStalls = totalStalls;
     this.availableStalls = availableStalls;
     this.gender = gender;
+
+    
 }
 
 export default Washroom;

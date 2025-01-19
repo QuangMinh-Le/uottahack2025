@@ -8,12 +8,11 @@ import Washroom from './Washroom';
 
 const ClientPage = (props) => {
     const [genderFilter, setGenderFilter] = useState('all');
-    const [stalls, setStalls] = useState({}); // Define the stalls state
 
-    const washrooms = [
+    const [washrooms, setWashroom] = useState([
         new Washroom(1, 6, 5, "male"),
         new Washroom(2, 6, 3, "female")
-    ];
+    ]);
 
     // Filter washrooms by gender
     const filteredWashrooms = washrooms.filter(washroom =>
@@ -43,17 +42,23 @@ const ClientPage = (props) => {
         
             solaceSession.on(solace.SessionEventCode.UP_NOTICE, () => {
                 console.log("Connected to Solace!");
-                solaceSession.subscribe(solace.SolclientFactory.createTopicDestination("restroom/stall/status"), true, null, 1000);
+                washrooms.forEach(washroom => {
+                    solaceSession.subscribe(
+                        solace.SolclientFactory.createTopicDestination(`washrooms/${washroom.id}`),
+                        true,
+                        null,
+                        1000
+                    );
+                });
             });
         
             solaceSession.on(solace.SessionEventCode.MESSAGE, (message) => {
                 const payload = message.getBinaryAttachment();
                 try {
-                    const [stall, status] = payload.split(": ");
-                    console.log(`Update received: ${stall} is ${status}`);
-                    setStalls((prevStalls) => ({
-                        ...prevStalls,
-                        [stall]: status === "occupied",
+                    const [washroomData, status] = payload.split(": ");
+                    console.log(`Update received: ${washroomData} is ${status}`);
+                    setWashroom((prevWashrooms) => ({
+                        ...prevWashrooms
                     }));
                 } catch (error) {
                     console.error("Failed to process message:", error);
