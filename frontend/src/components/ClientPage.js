@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import solace from 'solclientjs';
+import video from './assets/Kitten Unrolling Toilet Paper.mp4';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './ClientPage.css';
 import Washroom from './Washroom';
+import { BrowserRouter } from "react-router-dom";
 
 let data = "";
 let totalTaken = 0;
@@ -141,7 +143,11 @@ const ClientPage = (props) => {
         }, []);
     
     return (
+        <BrowserRouter>
+        
         <div className="container-fluid">
+
+         <iframe href="https://www.mappedin.com/" title="Mappedin Map" name="Mappedin Map" allow="clipboard-write 'self' https://app.mappedin.com; web-share 'self' https://app.mappedin.com" scrolling="no" width="100%" height="400" frameborder="0" src="https://app.mappedin.com/map/678c2b4c041860000bcf72cb?embedded=true"></iframe>
             {/* Top Half: Floorplan Image */}
             <div className="row">
                 <div className="col-12">
@@ -184,9 +190,17 @@ const ClientPage = (props) => {
                             ))}
                         </tbody>
                     </table>
+                    {/* Center the video */}
+                    <div className="d-flex justify-content-center my-4">
+                        <video autoPlay muted loop id="myVideo" style={{ maxWidth: "100%", height: "auto" }}>
+                            <source src={video} type="video/mp4" />
+                            Your browser does not support HTML5 video.
+                        </video>
+                    </div>
                 </div>
             </div>
         </div>
+        </BrowserRouter>
     );
 };
 
