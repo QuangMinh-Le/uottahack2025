@@ -30,7 +30,6 @@ messaging_service = (
     .with_reconnection_retry_strategy(RetryStrategy.parametrized_retry(20, 3))
     .with_transport_security_strategy(transport_security)
     .build()
-
 )
 
 
