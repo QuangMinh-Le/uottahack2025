@@ -11,8 +11,8 @@ const ClientPage = (props) => {
     const [genderFilter, setGenderFilter] = useState('all');
 
     const [washrooms, setWashrooms] = useState([
-        new Washroom("1", 5, 5, "male"),
-        new Washroom("2", 5, 5, "female")
+        new Washroom("1", "name", 5, 5, "male"),
+        new Washroom("2", "name", 5, 5, "female")
     ]);
 
     // Filter washrooms by gender
@@ -132,6 +132,46 @@ const ClientPage = (props) => {
                 }
             };
         }, []);
+
+        useEffect(() => {
+            const fetchWashroomData = () => {
+                console.log("Hello");
+            
+                fetch('http://localhost:5001/get-washrooms', {
+                    method: 'GET', // HTTP method
+                    headers: {
+                        'Content-Type': 'application/json', // Specifies the format of the data
+                    }
+                })
+                    .then((response) => {
+                        console.log("Response: ", response);
+                
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            console.error(`Failed to fetch washroom data. Status: ${response.status} ${response.statusText}`);
+                            return Promise.reject(`Error: ${response.status} ${response.statusText}`);
+                        }
+                    })
+                    .then((data) => {
+                        const washroomData = Object.values(data.washrooms).map(washroom =>
+                            new Washroom(
+                                washroom.id,
+                                washroom.name,
+                                washroom.totalStalls,
+                                washroom.totalAvailableStalls,
+                                washroom.gender
+                            )
+                        );
+                        setWashrooms(washroomData);
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching washroom data:", error);
+                    });
+            };
+            
+            fetchWashroomData();
+        }, []);
     
     return (
         <div className="container-fluid">
@@ -165,16 +205,51 @@ const ClientPage = (props) => {
                     <table className="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Floor 1</th>
-                                <th>Gender</th>
+                                <th>Washroom Name</th>
+                                <th>Available Stalls</th>
+                                <th>Washroom Availability</th>
+                                <th>Washroom Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredWashrooms.map(washroom => (
+ 
+                             {filteredWashrooms.map(washroom => (
                                 <tr key={washroom.id}>
-                                    <td>Washroom {washroom.id} 
-                                        {washroom.gender === "female" ? <i class="bi bi-person-standing-dress" style={{ color: '#c71585', marginLeft: '0.5rem' }}></i> : <i class="bi bi-person-standing" style={{ color: 'blue', marginLeft: '0.5rem' }}></i>} - {washroom.availableStalls} available</td>
-                                    <td>{washroom.gender}</td>
+                                    <td>{washroom.name} 
+                                    {washroom.gender === "female" ? <i class="bi bi-person-standing-dress" style={{ color: '#c71585', marginLeft: '0.5rem' }}></i> : <i class="bi bi-person-standing" style={{ color: 'blue', marginLeft: '0.5rem' }}></i>}</td>
+                                    <td>{washroom.availableStalls}/{washroom.totalStalls}</td>
+                                    <td>
+                                        {washroom.availableStalls > 0 ? (
+                                            <span className="text-success">Available</span>
+                                        ) : (
+                                            <span className="text-danger">Full</span>
+                                        )}
+                                    </td>
+                                    <td>
+                                    {washroom.availableStalls > 0 ? (
+                                        <span className="text-success">
+                                <span style={{
+                                                display: "inline-block",
+                                                width: "10px",
+                                                height: "10px",
+                                                backgroundColor: "green",
+                                                borderRadius: "50%",
+                                                marginLeft: "5px"
+                                            }}></span>
+                                        </span>
+                                    ) : (
+                                        <span className="text-danger">
+                                <span style={{
+                                                display: "inline-block",
+                                                width: "10px",
+                                                height: "10px",
+                                                backgroundColor: "red",
+                                                borderRadius: "50%",
+                                                marginLeft: "5px"
+                                            }}></span>
+                                        </span>
+                                    )}
+                                </td>
                                 </tr>
                             ))}
                         </tbody>
