@@ -151,31 +151,68 @@ washrooms = {
 #         publisher.terminate()
 #         messaging_service.disconnect()
 
+# Example bias factors:
+# Default bias factors for most washrooms
+DEFAULT_OCCUPANCY_PROBABILITY = 0.7  # chance a vacant stall becomes occupied
+DEFAULT_VACANCY_PROBABILITY   = 0.2  # chance an occupied stall becomes vacant
+
+# Custom bias factors for specific washrooms (IDs as strings)
+WASHROOM_BIAS = {
+    "1": {"occupancy": 0.95, "vacancy": 0.45},  # higher chance for washroom 1
+    "4": {"occupancy": 0.95, "vacancy": 0.1},  # higher chance for washroom 4
+}
+
+
+OCCUPANCY_PROBABILITY = 0.7  # chance a vacant stall becomes occupied
+VACANCY_PROBABILITY   = 0.2  # chance an occupied stall becomes vacant
+
 def manage_washroom_status():
     """
-    Background thread to simulate washroom status updates.
+    Background thread to simulate washroom status updates with a bias factor.
     """
     try:
         while True:
-            # Simulate random updates
-            washroom_id = random.choice(list(washrooms.keys()))  # Pick a random washroom
+            # Pick a random washroom
+            washroom_id = random.choice(list(washrooms.keys()))
             washroom = washrooms[washroom_id]
 
             # Pick a random stall in the chosen washroom
             stall_id = random.choice(list(washroom["stalls"].keys()))
             stall = washroom["stalls"][stall_id]
 
-            # Toggle the stall's status
-            vacant = not stall["vacant"]  # Flip the current status
+            # Determine the probabilities for this washroom
+            if washroom_id in WASHROOM_BIAS:
+                occupancy_probability = WASHROOM_BIAS[washroom_id]["occupancy"]
+                vacancy_probability   = WASHROOM_BIAS[washroom_id]["vacancy"]
+            else:
+                occupancy_probability = DEFAULT_OCCUPANCY_PROBABILITY
+                vacancy_probability   = DEFAULT_VACANCY_PROBABILITY
 
-            # Update Stall Status
-            if stall["vacant"] != vacant:  # Only update if status changes
+            # Current status
+            vacant = stall["vacant"]
+
+            # Decide if we change the stall's status based on the assigned bias factors
+            if vacant:
+                # If currently vacant, there's a probability we occupy it
+                if random.random() < occupancy_probability:
+                    vacant = False
+            else:
+                # If currently occupied, there's a probability it becomes vacant
+                if random.random() < vacancy_probability:
+                    vacant = True
+
+            # Update Stall Status if it actually changes
+            if stall["vacant"] != vacant:
                 stall["vacant"] = vacant
                 stall["timeVacant"] = int(time.time()) if vacant else 0
 
-                washroom["totalAvailableStalls"] += 1 if vacant else -1
+                # Update counters
+                if vacant:
+                    washroom["totalAvailableStalls"] += 1
+                else:
+                    washroom["totalAvailableStalls"] -= 1
 
-                # Publish updates to Solace topics
+                # -- Publish updates to Solace topics (pseudo-code below) --
                 stall_topic = Topic.of(f"washrooms/{washroom_id}/stalls/{stall_id}/status")
                 stall_payload = {
                     "washroom_id": washroom_id,
@@ -186,26 +223,26 @@ def manage_washroom_status():
                 publisher.publish(json.dumps(stall_payload), stall_topic)
                 print(f"Published stall update: {stall_payload}")
 
-                washroom_topic = Topic.of(f"washrooms/status")
+                washroom_topic = Topic.of("washrooms/status")
                 washroom_payload = {
                     "washroom_id": washroom_id,
                     "totalStalls": washroom["totalStalls"],
                     "totalAvailableStalls": washroom["totalAvailableStalls"],
                     "gender": washroom["gender"]
                 }
-
-                json_payload = json.dumps(washroom_payload)
-                publisher.publish(json_payload, washroom_topic)
+                publisher.publish(json.dumps(washroom_payload), washroom_topic)
                 print(f"Published washroom update: {washroom_payload}")
 
             # Print washroom overview
             print("\nWashrooms Overview:")
-            for washroom_id, data in washrooms.items():
-                print(f"{washroom_id} (Gender: {data['gender']}, "
-                      f"Available: {data['totalAvailableStalls']}/{data['totalStalls']})")
+            for wid, data in washrooms.items():
+                print(
+                    f"{wid} (Gender: {data['gender']}, "
+                    f"Available: {data['totalAvailableStalls']}/{data['totalStalls']})"
+                )
 
             # Sleep for a short interval before the next update
-            time.sleep(0.1)  # Adjust frequency of simulation updates as needed
+            time.sleep(0.5)
 
     except KeyboardInterrupt:
         print("\nExiting the publisher...")
