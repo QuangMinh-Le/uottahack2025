@@ -9,13 +9,13 @@ import {
   ResponsiveContainer
 } from "recharts";
 
-const StallUnavailableChart = ({ data, stallId }) => {
+const StallUnavailableChart = ({ data, stallId, washroomName }) => {
   // data is expected: [ { time: "09:00", unavailableCount: 2 }, ... ]
   // We'll show a bar chart of unavailableCount vs. time
 
   return (
     <div>
-      <h5>Stall #{stallId} Unavailability</h5>
+      <h5>Washroom {stallId} Unavailability</h5>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data} margin={{ top: 20, right: 20, bottom: 20 }}>
           <CartesianGrid strokeDasharray="3 3" />
