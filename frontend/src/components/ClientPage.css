@@ -4,15 +4,6 @@
     padding: 20px;
 }
 
-/* Floorplan image styling */
-.img-fluid {
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-height: 400px;
-    margin: auto;
-    display: block;
-}
-
 /* Washroom table styling */
 .table {
     background-color: #ffffff; /* White background for the table */
@@ -25,10 +16,14 @@
 
 /* Table header */
 .table th {
-    background-color: #343a40; /* Dark header background */
+    background: linear-gradient(to right, #923e3f, #f16c75); /* Gradient background */
     color: #ffffff; /* White text */
-    text-align: center;
+    text-align: center; /* Center text horizontally */
+    padding: 10px; /* Add some spacing inside the header */
+    border: none; /* Optional: Remove border if needed */
+    border-radius: 4px; /* Optional: Add rounded corners */
 }
+
 
 /* Table rows */
 .table td {
@@ -36,6 +31,16 @@
     padding: 8px;
 }
 
+/* Gradient container for the entire section */
+.gradient-container {
+    background: linear-gradient(to bottom, #f16c75, #ffbb7b); /* Gradient background */
+    padding: 20px;
+    border-radius: 20px; /* Rounded corners */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Shadow for elevation */
+    text-align: center; /* Center text and layout */
+    max-width: 80%;
+    margin: 20px auto; /* Center horizontally */
+}
 /* Filter dropdown */
 .form-select {
     border-radius: 5px;
@@ -51,6 +56,27 @@
 h2 {
     color: #343a40; /* Dark heading color */
 }
+
+.text {
+    font-family: Arial, sans-serif; 
+    font-size: 30px; 
+    font-weight: bold; 
+    background: linear-gradient(to right, #4883ff, #af5aff); /* Gradient effect from blue to purple */
+    -webkit-background-clip: text; /* Clip the gradient to the text */
+    -webkit-text-fill-color: transparent; /* Make the background fill the text */
+    text-align: center; 
+    margin: 0; 
+}
+
+/* Curvy wave separator */
+.wave-separator {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+}
+
+
 
 /* Responsive adjustments */
 @media (max-width: 768px) {

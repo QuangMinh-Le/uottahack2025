@@ -141,7 +141,7 @@ const ClientPage = (props) => {
         }, []);
     
     return (
-        <div className="container-fluid">
+        <div className="container">
             {/* Top Half: Floorplan Image */}
             <div className="row">
                 <div className="col-12">
@@ -150,8 +150,21 @@ const ClientPage = (props) => {
                 </div>
             </div>
 
+            {/* Curvy Line Separator */}
+            <svg
+                className="wave-separator"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 1440 320"
+            >
+                <path
+                    fill="#f16c75"
+                    fillOpacity="1"
+                    d="M0,224L48,213.3C96,203,192,181,288,160C384,139,480,117,576,112C672,107,768,117,864,128C960,139,1056,149,1152,149.3C1248,149,1344,139,1392,133.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+                ></path>
+            </svg>
+
             {/* Bottom Half: Washroom List and Filter */}
-            <div className="row">
+            <div className="gradient-container">
                 <div className="col-12">
                     <div className="d-flex justify-content-between align-items-center my-3">
                         <h2>Washrooms</h2>
@@ -169,7 +182,7 @@ const ClientPage = (props) => {
                         </div>
                     </div>
 
-                    <table className="table table-bordered">
+                    <table className="table table-striped">
                         <thead>
                             <tr>
                                 <th>Floor 1</th>
