@@ -68,7 +68,7 @@ const AdminDashboard = () => {
       const minStr = String(minute).padStart(2, "0");
       setDisplayTime(`${hourStr}:${minStr}`);
 
-    }, 400); // update every 100ms => 0.1 second
+    }, 500); // update every 100ms => 0.1 second
 
     return () => clearInterval(interval);
   }, []);

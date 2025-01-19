@@ -151,37 +151,64 @@ def manage_washroom_status():
                 else:
                     washroom["totalAvailableStalls"] -= 1
 
-                # -- Publish updates to Solace topics (pseudo-code below) --
-                stall_topic = Topic.of(f"washrooms/{washroom_id}/stalls/{stall_id}/status")
-                stall_payload = {
-                    "washroom_id": washroom_id,
-                    "stall_id": stall_id,
-                    "vacant": stall["vacant"],
-                    "timeVacant": stall["timeVacant"]
-                }
-                publisher.publish(json.dumps(stall_payload), stall_topic)
-                print(f"Published stall update: {stall_payload}")
+                # # -- Publish updates to Solace topics (pseudo-code below) --
+                # stall_topic = Topic.of(f"washrooms/{washroom_id}/stalls/{stall_id}/status")
+                # stall_payload = {
+                #     "washroom_name": washroom["name"],
+                #     "washroom_id": washroom_id,
+                #     "stall_id": stall_id,
+                #     "vacant": stall["vacant"],
+                #     "timeVacant": stall["timeVacant"]
+                # }
+                # publisher.publish(json.dumps(stall_payload), stall_topic)
+                # # print(f"Published stall update: {stall_payload}")
 
                 washroom_topic = Topic.of("washrooms/status")
                 washroom_payload = {
+                    "washroom_name": washroom["name"],
                     "washroom_id": washroom_id,
                     "totalStalls": washroom["totalStalls"],
                     "totalAvailableStalls": washroom["totalAvailableStalls"],
-                    "gender": washroom["gender"]
+                    "gender": washroom["gender"], 
                 }
+
                 publisher.publish(json.dumps(washroom_payload), washroom_topic)
                 print(f"Published washroom update: {washroom_payload}")
 
+            #Publish all-*** Build a list (or dict) of washroom summaries
+            all_washrooms_data = []
+            for washroom_id, w_data in washrooms.items():
+                # Extract fields you want to include in the "all washroom" snapshot
+                washroom_info = {
+                    "washroom_id":   washroom_id,
+                    "washroom_name": w_data["name"],
+                    "totalStalls":   w_data["totalStalls"],
+                    "totalAvailableStalls": w_data["totalAvailableStalls"],
+                    "gender":        w_data["gender"]
+                }
+                all_washrooms_data.append(washroom_info)
+
+            # Convert to JSON string
+            json_payload = json.dumps(all_washrooms_data)
+
+            # Decide on a dedicated topic, e.g. "washrooms/all/status"
+            # topic = Topic.of("washrooms/all/status")
+
+            # # Publish the entire list
+            # publisher.publish(json_payload, topic)
+
+            # print("Published ALL washrooms status:", all_washrooms_data)
+
             # Print washroom overview
-            print("\nWashrooms Overview:")
-            for wid, data in washrooms.items():
-                print(
-                    f"{wid} (Gender: {data['gender']}, "
-                    f"Available: {data['totalAvailableStalls']}/{data['totalStalls']})"
-                )
+            # print("\nWashrooms Overview:")
+            # for wid, data in washrooms.items():
+            #     print(
+            #         f"{wid} (Gender: {data['gender']}, "
+            #         f"Available: {data['totalAvailableStalls']}/{data['totalStalls']})"
+            #     )
 
             # Sleep for a short interval before the next update
-            time.sleep(0.5)
+            time.sleep(1)
 
     except KeyboardInterrupt:
         print("\nExiting the publisher...")
