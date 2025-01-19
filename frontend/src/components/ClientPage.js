@@ -139,12 +139,6 @@ const ClientPage = (props) => {
             <div className="row">
                 <div className="col-12">
                     <div className="text-center my-3">
-                        <img 
-                            src="/Floor1.png" 
-                            alt="Floorplan" 
-                            className="img-fluid border"
-                            style={{ maxHeight: '400px' }}
-                        />
                     </div>
                 </div>
             </div>
