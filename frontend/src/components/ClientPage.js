@@ -6,13 +6,18 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import './ClientPage.css';
 import Washroom from './Washroom';
 
-let data = ""
+let data = "";
+let totalTaken = 0;
 const ClientPage = (props) => {
     const [genderFilter, setGenderFilter] = useState('all');
 
     const [washrooms, setWashrooms] = useState([
         new Washroom("1", 5, 5, "male"),
-        new Washroom("2", 5, 5, "female")
+        new Washroom("2", 5, 5, "female"),
+        new Washroom("3", 5, 5, "male"),
+        new Washroom("4", 5, 5, "female"),
+        new Washroom("5", 5, 5, "male"),
+        new Washroom("6", 5, 5, "female")
     ]);
 
     // Filter washrooms by gender
@@ -98,6 +103,8 @@ const ClientPage = (props) => {
                     setWashrooms((prevWashrooms) =>
                         prevWashrooms.map((washroom) => {
                             if (washroom.id.toString() === data.washroom_id) {
+                                if(washroom.availableStalls < data.totalAvailableStalls)
+                                    totalTaken++;
                                 return {
                                     ...washroom,
                                     availableStalls: data.totalAvailableStalls
@@ -166,15 +173,13 @@ const ClientPage = (props) => {
                         <thead>
                             <tr>
                                 <th>Floor 1</th>
-                                <th>Gender</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filteredWashrooms.map(washroom => (
                                 <tr key={washroom.id}>
                                     <td>Washroom {washroom.id} 
-                                        {washroom.gender === "female" ? <i class="bi bi-person-standing-dress" style={{ color: '#c71585', marginLeft: '0.5rem' }}></i> : <i class="bi bi-person-standing" style={{ color: 'blue', marginLeft: '0.5rem' }}></i>} - {washroom.availableStalls} available</td>
-                                    <td>{washroom.gender}</td>
+                                        {washroom.gender === "female" ? <i class="bi bi-person-standing-dress" style={{ color: '#c71585', marginLeft: '0.5rem' }}></i> : <i class="bi bi-person-standing" style={{ color: 'blue', marginLeft: '0.5rem' }}></i>} - {washroom.availableStalls}/{washroom.totalStalls} available</td>
                                 </tr>
                             ))}
                         </tbody>

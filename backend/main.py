@@ -41,19 +41,47 @@ from solace.messaging.resources.topic import Topic
 
 washrooms = {
     "1": {
-        "id": 1,
+        "name": "Men's Washroom 101",
         "totalStalls": 5,
         "totalAvailableStalls": 5,
         "gender": "male",
         "stalls": {f"stall{i}": {"vacant": True, "timeVacant": 0} for i in range(1, 6)}
     },
     "2": {
-        "id": 2,
+        "name": "Women's Washroom 101",
         "totalStalls": 5,
         "totalAvailableStalls": 5,
         "gender": "female",
         "stalls": {f"stall{i}": {"vacant": True, "timeVacant": 0} for i in range(1, 6)}
-    }
+    },
+    "3": {
+        "name": "Men's Washroom 102",
+        "totalStalls": 5,
+        "totalAvailableStalls": 5,
+        "gender": "male",
+        "stalls": {f"stall{i}": {"vacant": True, "timeVacant": 0} for i in range(1, 6)}
+    },    
+    "4": {
+        "name": "Women's Washroom 102",
+        "totalStalls": 5,
+        "totalAvailableStalls": 5,
+        "gender": "female",
+        "stalls": {f"stall{i}": {"vacant": True, "timeVacant": 0} for i in range(1, 6)}
+    },
+    "5": {
+        "name": "Men's Washroom 103",
+        "totalStalls": 5,
+        "totalAvailableStalls": 5,
+        "gender": "male",
+        "stalls": {f"stall{i}": {"vacant": True, "timeVacant": 0} for i in range(1, 6)}
+    },
+    "6": {
+        "name": "Women's Washroom 103",
+        "totalStalls": 5,
+        "totalAvailableStalls": 5,
+        "gender": "female",
+        "stalls": {f"stall{i}": {"vacant": True, "timeVacant": 0} for i in range(1, 6)}
+    },
 }
 
 
