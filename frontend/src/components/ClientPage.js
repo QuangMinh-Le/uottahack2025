@@ -219,37 +219,71 @@ const ClientPage = (props) => {
                                     {washroom.gender === "female" ? <i class="bi bi-person-standing-dress" style={{ color: '#c71585', marginLeft: '0.5rem' }}></i> : <i class="bi bi-person-standing" style={{ color: 'blue', marginLeft: '0.5rem' }}></i>}</td>
                                     <td>{washroom.availableStalls}/{washroom.totalStalls}</td>
                                     <td>
-                                        {washroom.availableStalls > 0 ? (
-                                            <span className="text-success">Available</span>
-                                        ) : (
-                                            <span className="text-danger">Full</span>
-                                        )}
-                                    </td>
-                                    <td>
-                                    {washroom.availableStalls > 0 ? (
-                                        <span className="text-success">
-                                <span style={{
-                                                display: "inline-block",
-                                                width: "10px",
-                                                height: "10px",
-                                                backgroundColor: "green",
-                                                borderRadius: "50%",
-                                                marginLeft: "5px"
-                                            }}></span>
+                                    {washroom.availableStalls === 0 ? (
+                                        // FULL (0 stalls left)
+                                        <span className="text-danger">
+                                        Full
+
+                                        </span>
+                                    ) : washroom.availableStalls === 1 ? (
+                                        // ALMOST FULL (1 stall left)
+                                        <span style={{ color: "#FFC107" /* bootstrap warning/yellow */ }}>
+                                        Almost Full
+
                                         </span>
                                     ) : (
-                                        <span className="text-danger">
-                                <span style={{
-                                                display: "inline-block",
-                                                width: "10px",
-                                                height: "10px",
-                                                backgroundColor: "red",
-                                                borderRadius: "50%",
-                                                marginLeft: "5px"
-                                            }}></span>
+                                        // AVAILABLE (2 or more stalls left)
+                                        <span className="text-success">
+                                        Available
+ 
                                         </span>
                                     )}
-                                </td>
+                                    </td>
+                                    <td>
+                                    {washroom.availableStalls === 0 ? (
+                                        // FULL (0 stalls left)
+                                        <span className="text-danger">
+                                        <span
+                                            style={{
+                                            display: "inline-block",
+                                            width: "10px",
+                                            height: "10px",
+                                            backgroundColor: "red",
+                                            borderRadius: "50%",
+                                            marginLeft: "5px"
+                                            }}
+                                        ></span>
+                                        </span>
+                                    ) : washroom.availableStalls === 1 ? (
+                                        // ALMOST FULL (1 stall left)
+                                        <span style={{ color: "#FFC107" /* bootstrap warning/yellow */ }}>
+                                        <span
+                                            style={{
+                                            display: "inline-block",
+                                            width: "10px",
+                                            height: "10px",
+                                            backgroundColor: "#FFC107",
+                                            borderRadius: "50%",
+                                            marginLeft: "5px"
+                                            }}
+                                        ></span>
+                                        </span>
+                                    ) : (
+                                        // AVAILABLE (2 or more stalls left)
+                                        <span className="text-success">
+                                        <span
+                                            style={{
+                                            display: "inline-block",
+                                            width: "10px",
+                                            height: "10px",
+                                            backgroundColor: "green",
+                                            borderRadius: "50%",
+                                            marginLeft: "5px"
+                                            }}
+                                        ></span>
+                                        </span>
+                                    )}
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
