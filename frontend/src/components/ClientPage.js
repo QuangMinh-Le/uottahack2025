@@ -243,6 +243,7 @@ const ClientPage = (props) => {
                                     {washroom.availableStalls === 0 ? (
                                         // FULL (0 stalls left)
                                         <span className="text-danger">
+
                                         <span
                                             style={{
                                             display: "inline-block",

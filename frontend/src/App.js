@@ -3,8 +3,7 @@ import ClientPage from "./components/ClientPage";
 import AdminDashboard from "./AdminPage/AdminPage";
 
 function App() {
-  // Track which page is currently "visible", but both remain rendered
-  const [showClientPage, setShowClientPage] = useState(false);
+  const [showClientPage, setShowClientPage] = useState(true);
 
   const footerStyle = {
     position: "fixed",
@@ -47,13 +46,8 @@ function App() {
 
   return (
     <div style={{ paddingBottom: "80px" }}>
-      {/* Render both pages at once, but toggle visibility */}
-      <div style={{ display: showClientPage ? "none" : "block" }}>
-        <AdminDashboard />
-      </div>
-      <div style={{ display: showClientPage ? "block" : "none" }}>
-        <ClientPage />
-      </div>
+      {/* Conditionally render either Client or Admin */}
+      {showClientPage ? <ClientPage /> : <AdminDashboard />}
 
       {/* Fixed footer navigation */}
       <nav style={footerStyle}>
