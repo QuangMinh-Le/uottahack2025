@@ -6,12 +6,13 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import './ClientPage.css';
 import Washroom from './Washroom';
 
+let data = ""
 const ClientPage = (props) => {
     const [genderFilter, setGenderFilter] = useState('all');
 
-    const [washrooms, setWashroom] = useState([
-        new Washroom(1, 6, 5, "male"),
-        new Washroom(2, 6, 3, "female")
+    const [washrooms, setWashrooms] = useState([
+        new Washroom("1", 5, 5, "male"),
+        new Washroom("2", 5, 5, "female")
     ]);
 
     // Filter washrooms by gender
@@ -20,7 +21,7 @@ const ClientPage = (props) => {
     );
 
         useEffect(() => {
-            const solaceHost = 'wss://mr-connection-ghw5zbvtb29.messaging.solace.cloud';
+            const solaceHost = 'ws://mr-connection-ghw5zbvtb29.messaging.solace.cloud:80';
             const solaceUsername = 'solace-cloud-client';
             const solacePassword = 'b8888b098i13ip23decqu9cj87';
             
@@ -42,29 +43,80 @@ const ClientPage = (props) => {
         
             solaceSession.on(solace.SessionEventCode.UP_NOTICE, () => {
                 console.log("Connected to Solace!");
-                washrooms.forEach(washroom => {
+                // washrooms.forEach((washroom) => {
+                //     console.log("WashROM ", washroom);
+                //     const topic = `washrooms/${washroom.id}/status`;
+                //     solaceSession.subscribe(
+                //         solace.SolclientFactory.createTopicDestination(topic),
+                //         true,
+                //         washroom.id,
+                //         1000
+                //     );
+                //     console.log(`Subscribed to topic: ${topic}`);
+
+                // });
+
+             
+                    const topic = `washrooms/status`;
                     solaceSession.subscribe(
-                        solace.SolclientFactory.createTopicDestination(`washrooms/${washroom.id}`),
+                        solace.SolclientFactory.createTopicDestination(topic),
                         true,
-                        null,
                         1000
                     );
+                    console.log(`Subscribed to topic: ${topic}`);
+
+                
+
+
+                solaceSession.on(solace.SessionEventCode.SUBSCRIPTION_OK, () => {
+                    console.log("Subscription acknowledged by the broker.");
                 });
+            
+                solaceSession.on(solace.SessionEventCode.SUBSCRIPTION_ERROR, (error) => {
+                    console.error("Subscription error:", error);
+                });                
             });
         
             solaceSession.on(solace.SessionEventCode.MESSAGE, (message) => {
-                const payload = message.getBinaryAttachment();
-                try {
-                    const [washroomData, status] = payload.split(": ");
-                    console.log(`Update received: ${washroomData} is ${status}`);
-                    setWashroom((prevWashrooms) => ({
-                        ...prevWashrooms
-                    }));
-                } catch (error) {
-                    console.error("Failed to process message:", error);
+                console.log("Message here: " + message);
+                const topic = message.getDestination().getName();
+                const rawPayload = message.getBinaryAttachment();
+                const cleanPayload = rawPayload
+                .replace(/^.*?{/, "{")  // Remove any characters before the first '{'
+                .replace(/}[^}]*$/, "}") // Remove any characters after the last '}'
+                .replace(/[\u0000-\u001F\u007F-\u009F]/g, "") // Remove control characters
+                .trim();
+                console.log(`Message received on topic ${topic}:`, cleanPayload);
+
+                data = JSON.parse(cleanPayload);
+                console.log("Parsed payload:", data);
+
+                if (topic.startsWith("washrooms/")) {
+                    const washroomId = topic.split("/")[1]; // Extract washroom ID
+                    console.log(`Washroom ${washroomId} update:`, data);
+            
+                    setWashrooms((prevWashrooms) =>
+                        prevWashrooms.map((washroom) => {
+                            if (washroom.id.toString() === data.washroom_id) {
+                                return {
+                                    ...washroom,
+                                    availableStalls: data.totalAvailableStalls
+                                };
+                            }
+                            return washroom;
+                        })
+                    );
+
                 }
+
+                // try {
+                //     const data = JSON.parse(payload);
+                //     console.log("Parsed payload data:", data);
+                // } catch (error) {
+                //     console.error("Failed to parse payload:", error);
+                // }
             });
-        
+
             solaceSession.on(solace.SessionEventCode.DISCONNECTED, () => {
                 console.log("Disconnected from Solace.");
             });

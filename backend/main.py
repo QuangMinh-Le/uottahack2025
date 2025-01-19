@@ -40,14 +40,14 @@ import time
 from solace.messaging.resources.topic import Topic
 
 washrooms = {
-    "washroom1": {
+    "1": {
         "id": 1,
         "totalStalls": 5,
         "totalAvailableStalls": 5,
         "gender": "male",
         "stalls": {f"stall{i}": {"vacant": True, "timeVacant": 0} for i in range(1, 6)}
     },
-    "washroom2": {
+    "2": {
         "id": 2,
         "totalStalls": 5,
         "totalAvailableStalls": 5,
@@ -55,6 +55,8 @@ washrooms = {
         "stalls": {f"stall{i}": {"vacant": True, "timeVacant": 0} for i in range(1, 6)}
     }
 }
+
+
 
 try:
     while True:
@@ -95,15 +97,31 @@ try:
             print(f"Published stall update: {stall_payload}")
 
             # Publish Washroom Update
-            washroom_topic = Topic.of(f"washrooms/{washroom_id}/status")
+            # washroom_topic = Topic.of(f"washrooms/{wasçhroom_id}/status")
+            # washroom_payload = {
+            #     "washroom_id": washroom_id,
+            #     "totalStalls": washrooms[washroom_id]["totalStalls"],
+            #     "totalAvailableStalls": washrooms[washroom_id]["totalAvailableStalls"],
+            #     "gender": washrooms[washroom_id]["gender"]
+            # }
+            # publisher.publish(str(washroom_payload), washroom_topic)
+            # print(f"Published washroom update: {washroom_payload}")
+            # print(f"Published washroom topic: {washroom_topic}")
+
+            washroom_topic = Topic.of(f"washrooms/status")
             washroom_payload = {
                 "washroom_id": washroom_id,
                 "totalStalls": washrooms[washroom_id]["totalStalls"],
                 "totalAvailableStalls": washrooms[washroom_id]["totalAvailableStalls"],
                 "gender": washrooms[washroom_id]["gender"]
             }
-            publisher.publish(str(washroom_payload), washroom_topic)
+
+            json_payload = json.dumps(washroom_payload)
+
+            publisher.publish(json_payload, washroom_topic)
             print(f"Published washroom update: {washroom_payload}")
+            print(f"Published washroom topic: {washroom_topic}")
+            
         else:
             print("No status change detected.")
 
