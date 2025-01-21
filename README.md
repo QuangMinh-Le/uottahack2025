@@ -8,6 +8,21 @@ DEMO: https://youtu.be/WoqqyPd7O_s
 Built using React, Python, and JavaScript, and powered by Solace's event-driven architecture, Hack The Fllush is designed to deliver accurate, real-time information about washroom occupancy and usage. Whether you're a building user seeking the nearest available washroom or an admin optimizing cleaning schedules, Hack The Fllush provides actionable insights that make washroom management smarter and more efficient.
 
 ---
+
+## ⚙️ How to set up
+- Clone the repo
+### Backend:
+- Install python, pip, npm
+- <code>cd backend</code>
+- <code>pip install Flask</code>
+- <code>pip install Flask-Cors</code>
+- <code>pip install solace-pubsubplus</code>
+- Run backend:<code>python main.py</code>
+### Frontend:
+- <code>cd frontend</code>
+- <code>npm install</code>
+- Run frontend<code>npm start</code>
+
 ## 💡 Features
 Hack The Fllush goes beyond merely locating toilets. By leveraging real-time vacancy data:
 
